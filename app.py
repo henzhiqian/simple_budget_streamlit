@@ -1,12 +1,14 @@
 import calendar  # Core Python Module
 from datetime import datetime
 import pandas as pd  # Core Python Module
+from dateutil.relativedelta import relativedelta
 
 import plotly.graph_objects as go  # pip install plotly
 import streamlit as st  # pip install streamlit
 from streamlit_option_menu import option_menu  # pip install streamlit-option-menu
 
 import database as db  # local import
+import creditcard # local import
 
 # -------------- SETTINGS --------------
 incomes = ["Salary", "Investment", "Other Income"]
@@ -55,7 +57,13 @@ if selected == "Data Entry":
     option = st.selectbox('How would you like to import data?', ('Credit card bills', 'Bank sync', 'Manual Entry'))
 
     if option == 'Credit card bills':
-        pass
+        uploaded_file = st.file_uploader("Upload credit card statement", ["pdf", "PDF"])
+        if uploaded_file is not None:
+            with open('./temp/tmp.pdf', 'wb') as f:
+                f.write(uploaded_file.getbuffer())
+            df = creditcard.read_creditcard('./temp/tmp.pdf')
+            # st.write(df)
+ 
 
     elif option == 'Bank sync':
         banks_lst = st.selectbox('Which bank would you like to sync?', ('All', 'DBS', 'OCBC', 'UOB', 'Endowus'))
@@ -99,7 +107,7 @@ if selected == "Data Entry":
 if selected == "Data Visualization":
     st.header("Data Visualization")
     with st.form("saved_periods"):
-        start_date = st.date_input("Start Date", datetime.today())
+        start_date = st.date_input("Start Date", datetime.today() - relativedelta(days=30))
         end_date = st.date_input("End Date", datetime.today())
         submitted = st.form_submit_button("Plot Period")
 
@@ -135,3 +143,4 @@ if selected == "Data Visualization":
             fig = go.Figure(data)
             fig.update_layout(margin=dict(l=0, r=0, t=5, b=5))
             st.plotly_chart(fig, use_container_width=True)
+            
