@@ -4,9 +4,10 @@
 ## markdown todo list
 - [x] add requirements.txt
 - [ ] add .env
-- [ ] add .gitignore
+- [x] add .gitignore
 - [x] add db
 - [ ] add security on db
 - [ ] add gitlab pipeline
-- [ ] add credit card bills parser
+- [x] add credit card bills parser
+- [ ] add credit card categorizer
 - [ ] add sync to banks APIs
