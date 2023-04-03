@@ -2,7 +2,7 @@ import calendar  # Core Python Module
 from datetime import datetime
 import pandas as pd  # Core Python Module
 from dateutil.relativedelta import relativedelta
-
+import os
 import plotly.graph_objects as go  # pip install plotly
 import streamlit as st  # pip install streamlit
 from streamlit_option_menu import option_menu  # pip install streamlit-option-menu
@@ -62,7 +62,9 @@ if selected == "Data Entry":
             with open('./temp/tmp.pdf', 'wb') as f:
                 f.write(uploaded_file.getbuffer())
             df = creditcard.read_creditcard('./temp/tmp.pdf')
-            # st.write(df)
+            os.remove('./temp/tmp.pdf')
+            st.write(df)
+            # Convert text to embeddings 
  
 
     elif option == 'Bank sync':
